@@ -7,9 +7,13 @@ export const useSales = () => {
     queryKey: ["sales-map"],
     queryFn: async () => {
       const { data } = await api.get<CordResponse>("/cords", {
-        params: { page: 1, limit: 1000 },
+        params: { 
+          page: 1, 
+          limit: 1000 
+        },
       });
       return data;
     },
+    staleTime: 1000 * 60 * 5,
   });
 };

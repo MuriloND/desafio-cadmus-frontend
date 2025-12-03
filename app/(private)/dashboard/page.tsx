@@ -1,4 +1,5 @@
 import { FruitTable } from "@/features/fruits/components/FruitTable";
+import { SalesMap } from "@/features/map/components/SalesMap";
 
 export default async function DashboardPage() {
   return (
@@ -20,6 +21,15 @@ export default async function DashboardPage() {
           </div>
           
           <FruitTable />
+        </section>
+        <section>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              Mapa de Vendas
+            </h2>
+            
+            <div className="relative z-0"> 
+               <SalesMap />
+            </div>
         </section>
       </main>
     </div>
