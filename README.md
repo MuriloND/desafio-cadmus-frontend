@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍎 Cadmus Fruit Dashboard - Desafio Front-end Senior
 
-## Getting Started
+Painel administrativo de alta performance para gestão de vendas de frutas, desenvolvido com **Next.js 16**, **TailwindCSS** e **TanStack Query**.
 
-First, run the development server:
+## 🚀 Tecnologias e Decisões Arquiteturais
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* **Next.js 16 (App Router):** Utilizado para aproveitar Server Actions e otimizações de rota.
+* **React Query (TanStack v5):** Escolhido para gerenciamento de estado server-side, cache e *infinite scroll*, eliminando "useEffect hell".
+* **TanStack Virtual:** Implementado na tabela de frutas para garantir performance fluida mesmo com milhares de registros (DOM Recycling).
+* **TailwindCSS v4:** Utilizado via variáveis CSS nativas (`@theme`) para um Design System consistente e leve.
+* **Leaflet (React Leaflet):** Mapa interativo com renderização Client-Side (Lazy Loading) para evitar bloqueio da thread principal.
+* **Autenticação:** Sistema híbrido utilizando **Server Actions** para comunicação segura com API e **Cookies** para persistência de sessão (compatível com SSR).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Instalação e Execução
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Pré-requisitos
+* Node.js 18+ (24.11.1 used)
+* Backend da API rodando [https://github.com/joeydoesntsharefood/desafio-cadmus]
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Passo a Passo
 
-## Learn More
+1.  **Clone o repositório**
+    ```bash
+    git clone [https://github.com/MuriloND/desafio-cadmus-frontend.git](https://github.com/MuriloND/desafio-cadmus-frontend.git)
+    cd desafio-cadmus-frontend
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **Instale as dependências**
+    ```bash
+    npm install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3.  **Configure as Variáveis de Ambiente**
+    Crie um arquivo `.env.local` na raiz:
+    ```ini
+    NEXT_PUBLIC_API_URL=SUA_API_URL
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4.  **Inicie o projeto**
+    ```bash
+    npm run dev
+    ```
+    Acesse: `http://localhost:3000`
 
-## Deploy on Vercel
+## 📱 Features Implementadas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* [x] Login com Validação e Feedback Visual
+* [x] Proteção de Rotas (Middleware/Proxy)
+* [x] Tabela Virtualizada com Scroll Infinito
+* [x] Ordenação Server-Side
+* [x] Mapa Interativo com Pins de Vendas
+* [x] Skeleton Loading para melhor UX
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Desenvolvido como parte do processo seletivo Cadmus.
