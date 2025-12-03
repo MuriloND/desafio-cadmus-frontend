@@ -27,7 +27,7 @@ export const LoginForm = () => {
             type="email"
             required
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
-            placeholder="admin@admin.com"
+            placeholder="seu@email.com"
           />
         </div>
 
