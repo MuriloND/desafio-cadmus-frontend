@@ -1,3 +1,4 @@
+import { logoutAction } from "@/features/auth/actions";
 import { FruitTable } from "@/features/fruits/components/FruitTable";
 import { SalesMap } from "@/features/map/components/SalesMap";
 
@@ -9,6 +10,23 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-bold tracking-tight">
             Dashboard de <span className="text-primary">Frutas</span>
           </h1>
+
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 opacity-90">
+              <span className="material-symbols-outlined text-xl">account_circle</span>
+              <span className="text-sm font-medium">Admin</span>
+            </div>
+
+            <form action={logoutAction}>
+              <button 
+                type="submit" 
+                className="flex items-center gap-1 text-sm font-semibold text-red-400 hover:text-red-300 transition-colors border border-red-900/30 bg-red-900/10 px-3 py-1.5 rounded-lg hover:bg-red-900/30"
+              >
+                <span className="material-symbols-outlined text-lg">logout</span>
+                Sair
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
