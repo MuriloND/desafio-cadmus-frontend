@@ -1,20 +1,32 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useSales } from "../hooks/useSales";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { MapMarker } from "./MapMarker";
 
-const iconDefault = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
+const createClusterCustomIcon = function (cluster: any) {
+  const count = cluster.getChildCount();
+  let colorClass = "bg-blue-500 border-blue-300";
+  let size = "w-10 h-10";
+
+  if (count >= 10 && count < 100) {
+    colorClass = "bg-yellow-500 border-yellow-300";
+    size = "w-12 h-12";
+  } else if (count >= 100) {
+    colorClass = "bg-red-500 border-red-300";
+    size = "w-14 h-14";
+  }
+
+  return L.divIcon({
+    html: `<div class="${colorClass} ${size} rounded-full flex items-center justify-center text-white font-bold border-4 shadow-lg transform hover:scale-110 transition-transform duration-200"><span class="text-sm">${count}</span></div>`,
+    className: "custom-marker-cluster",
+    iconSize: L.point(40, 40, true),
+  });
+};
 
 export default function MapContent() {
   const { data, isLoading, isError } = useSales();
@@ -22,56 +34,39 @@ export default function MapContent() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[400px] rounded-xl overflow-hidden relative bg-gray-100">
+      <div className="w-full h-[500px] bg-gray-100 rounded-xl relative overflow-hidden">
         <Skeleton className="w-full h-full" />
-        <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-          Carregando mapa e coordenadas...
-        </div>
+        <span className="absolute inset-0 flex items-center justify-center text-gray-500 font-medium z-10">
+          Carregando mapa...
+        </span>
       </div>
     );
   }
 
-  if (isError) {
-    return (
-      <div className="w-full h-[400px] bg-red-50 rounded-xl flex items-center justify-center text-red-500 border border-red-200">
-        Erro ao carregar dados do mapa.
-      </div>
-    );
-  }
-
-  const sales = data?.data || [];
+  if (isError) return <div className="p-10 text-center text-red-500">Erro ao carregar o mapa.</div>;
 
   return (
-    <div className="w-full h-[500px] rounded-xl overflow-hidden shadow-sm border border-gray-200 z-0">
+    <div className="w-full h-[500px] rounded-xl overflow-hidden shadow-lg border border-gray-200 z-0 relative">
       <MapContainer
         center={CENTER_SP}
-        zoom={10}
-        scrollWheelZoom={true} 
+        zoom={5}
+        scrollWheelZoom={true}
         style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution='&copy; OpenStreetMap'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {sales.map((sale) => (
-          <Marker
-            key={sale.id}
-            position={[sale.lat, sale.lng]} 
-            icon={iconDefault}
-          >
-            <Popup>
-              <div className="text-sm">
-                <strong className="text-primary block mb-1">{sale.fruitName}</strong>
-                <p>Quantidade: {sale.quantity}kg</p>
-                <p>Total: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sale.total)}</p>
-                <p className="text-xs text-gray-500 mt-2">
-                  {new Date(sale.soldAt).toLocaleDateString()}
-                </p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        <MarkerClusterGroup
+          chunkedLoading
+          iconCreateFunction={createClusterCustomIcon}
+          spiderfyOnMaxZoom={true}
+        >
+          {data?.data.map((sale) => (
+            <MapMarker key={sale.id} sale={sale} />
+          ))}
+        </MarkerClusterGroup>
       </MapContainer>
     </div>
   );
