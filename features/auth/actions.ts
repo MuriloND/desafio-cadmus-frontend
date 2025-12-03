@@ -38,6 +38,13 @@ export async function loginAction(prevState: LoginState, formData: FormData) {
     return { error: "Falha na comunicação com o servidor." };
   }
 
-  console.log("LOGOU")
   redirect("/dashboard");
+}
+
+export async function logoutAction() {
+  const cookieStore = await cookies();
+  
+  cookieStore.delete("cadmus.token");
+  
+  redirect("/login");
 }
